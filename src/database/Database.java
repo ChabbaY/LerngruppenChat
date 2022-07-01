@@ -1,11 +1,31 @@
 package database;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.*;
 
 public class Database {
     private final String USER, PASS;
     private final Connection conn;
 
+    public Database() {
+        String user = null, pass = null;
+        try (BufferedReader br = new BufferedReader(new FileReader("res/credentials.txt"))) {
+            user = br.readLine();
+            pass = br.readLine();
+        } catch (FileNotFoundException e) {
+            System.out.println("Datei nicht gefunden");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Fehler beim Lesen der Datei");
+            e.printStackTrace();
+        }
+        USER = user;
+        PASS = pass;
+        conn = getConnection();
+    }
     public Database(String user, String pass) {
         USER = user;
         PASS = pass;
@@ -35,9 +55,8 @@ public class Database {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, name);
             ResultSet result = pstmt.executeQuery();
-            while(result.next()) {
-                return pstmt.getResultSet().getInt("id");
-            }
+            result.next();
+            return result.getInt("id");
         } catch (SQLException e) {
             System.out.println("Datenbankfehler");
             e.printStackTrace();
@@ -51,9 +70,8 @@ public class Database {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, frage);
             ResultSet result = pstmt.executeQuery();
-            while(result.next()) {
-                return pstmt.getResultSet().getInt("id");
-            }
+            result.next();
+            return result.getInt("id");
         } catch (SQLException e) {
             System.out.println("Datenbankfehler");
             e.printStackTrace();
@@ -84,6 +102,41 @@ public class Database {
             System.out.println("Datenbankfehler");
             e.printStackTrace();
         }
+    }
+
+    public Data[] getDetails() {
+        if (conn == null) return null;
+        Data[] data = new Data[countDetails()];
+        String sql = "SELECT name, frage, frage_nr, antwort FROM mitglied_frage LEFT JOIN mitglied ON (mitglied_id=mitglied.id) LEFT JOIN frage ON (frage_id=frage.id) ORDER BY frage";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet result = pstmt.executeQuery();
+            int index = 0;
+            while(result.next()) {
+                ResultSet set = pstmt.getResultSet();
+                data[index] = new Data(set.getString("name"), set.getString("frage"), set.getInt("frage_nr"), set.getString("antwort"));
+                index++;
+            }
+            return data;
+        } catch (SQLException e) {
+            System.out.println("Datenbankfehler");
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public int countDetails() {
+        if (conn == null) return 0;
+        String sql = "SELECT COUNT(*) AS anzahl FROM mitglied_frage";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet result = pstmt.executeQuery();
+            result.next();
+            return result.getInt("anzahl");
+        } catch (SQLException e) {
+            System.out.println("Datenbankfehler");
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public void setDetails(String mitglied, String frage, int frage_nr, String antwort) {

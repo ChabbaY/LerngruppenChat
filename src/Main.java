@@ -1,7 +1,9 @@
-import gui.Window;
+import gui.InputWindow;
+import gui.OverviewWindow;
 
 public class Main {
     public static void main(String[] args) {
-        new Window();
+        new InputWindow();
+        new OverviewWindow();
     }
 }

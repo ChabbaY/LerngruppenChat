@@ -6,21 +6,20 @@ import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
+import java.io.Serial;
 import java.text.NumberFormat;
 
-public class Window extends JFrame {
+public class InputWindow extends JFrame {
     @Serial
     private static final long serialVersionUID = 1L;
-    private static Database database;
+    private final Database database;
 
-    JTextField name_input, frage_input, antwort_input;
-    JFormattedTextField frage_nr_input;
-    JButton commit_frage;
+    private final JTextField name_input, frage_input, antwort_input;
+    private final JFormattedTextField frage_nr_input;
 
-    public Window() {
+    public InputWindow() {
         super("Lerngruppe - Chat");
-        this.setSize(1000, 1000);
+        this.setSize(1000, 800);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel();
@@ -31,7 +30,7 @@ public class Window extends JFrame {
         format.setGroupingUsed(false);
         NumberFormatter formatter = new NumberFormatter(format);
         formatter.setAllowsInvalid(false);
-        initializeDBConn();
+        database = new Database();
 
         panel.add(new JLabel("Name"));
         name_input = new JTextField();
@@ -45,7 +44,7 @@ public class Window extends JFrame {
         panel.add(new JLabel("Antwort"));
         antwort_input = new JTextField();
         panel.add(antwort_input);
-        commit_frage = new JButton("absenden");
+        JButton commit_frage = new JButton("absenden");
         panel.add(commit_frage);
         commit_frage.addActionListener(new ActionListener() {
             @Override
@@ -69,20 +68,5 @@ public class Window extends JFrame {
         });
 
         this.setVisible(true);
-    }
-
-    public static void initializeDBConn() {
-        String user = null, pass = null;
-        try (BufferedReader br = new BufferedReader(new FileReader("res/credentials.txt"))) {
-            user = br.readLine();
-            pass = br.readLine();
-        } catch (FileNotFoundException e) {
-            System.out.println("Datei nicht gefunden");
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.out.println("Fehler beim Lesen der Datei");
-            e.printStackTrace();
-        }
-        database = new Database(user, pass);
     }
 }
