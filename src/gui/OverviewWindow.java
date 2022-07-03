@@ -14,9 +14,9 @@ public class OverviewWindow extends JFrame {
 
     private final JPanel panel;
 
-    public OverviewWindow() {
+    public OverviewWindow(Data[] data) {
         super("Lerngruppe - Chat");
-        this.setSize(1000, 800);
+        this.setSize(200, 800);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         panel = new JPanel();
@@ -28,11 +28,12 @@ public class OverviewWindow extends JFrame {
         NumberFormatter formatter = new NumberFormatter(format);
         formatter.setAllowsInvalid(false);
 
+        load(data);
+
         this.setVisible(true);
     }
 
-    public void reload(Data[] data) {
-        panel.removeAll();
+    public void load (Data[] data) {
         String letzteFrage = null;
 
         for (Data dat : data) {

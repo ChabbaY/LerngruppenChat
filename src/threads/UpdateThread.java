@@ -8,21 +8,20 @@ import java.util.Arrays;
 
 public class UpdateThread extends Thread {
     private final Database database;
-    OverviewWindow overviewWindow;
 
-    public UpdateThread(Database database, OverviewWindow overviewWindow) {
+    public UpdateThread(Database database) {
         this.database = database;
-        this.overviewWindow = overviewWindow;
     }
 
     @Override
     public void run() {
         Data[] lastData = null;
+        OverviewWindow overviewWindow = null;
         while (true) {
             Data[] data = database.getDetails();
             if (!Arrays.equals(data, lastData)) {
-                overviewWindow = new OverviewWindow();
-                overviewWindow.reload(data);
+                if (overviewWindow != null) overviewWindow.dispose();
+                overviewWindow = new OverviewWindow(data);
                 lastData = data;
             }
             try {

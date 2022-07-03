@@ -181,11 +181,13 @@ public class Database {
                 e.printStackTrace();
             }
         } else {
-            sql = "UPDATE mitglied_frage SET frage_nr=?, antwort=?";
+            sql = "UPDATE mitglied_frage SET frage_nr=?, antwort=? WHERE mitglied_id=? AND frage_id=?";
             try {
                 PreparedStatement pstmt = conn.prepareStatement(sql);
                 pstmt.setInt(1, frage_nr);
                 pstmt.setString(2, antwort);
+                pstmt.setInt(3, mitglied_id);
+                pstmt.setInt(4, frage_id);
                 pstmt.executeUpdate();
             } catch (SQLException e) {
                 System.out.println("Datenbankfehler");
