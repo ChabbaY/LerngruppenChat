@@ -12,12 +12,11 @@ import java.text.NumberFormat;
 public class InputWindow extends JFrame {
     @Serial
     private static final long serialVersionUID = 1L;
-    private final Database database;
 
     private final JTextField name_input, frage_input, antwort_input;
     private final JFormattedTextField frage_nr_input;
 
-    public InputWindow() {
+    public InputWindow(Database database) {
         super("Lerngruppe - Chat");
         this.setSize(1000, 800);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -30,7 +29,6 @@ public class InputWindow extends JFrame {
         format.setGroupingUsed(false);
         NumberFormatter formatter = new NumberFormatter(format);
         formatter.setAllowsInvalid(false);
-        database = new Database();
 
         panel.add(new JLabel("Name"));
         name_input = new JTextField();

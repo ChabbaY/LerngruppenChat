@@ -1,7 +1,6 @@
 package gui;
 
 import database.Data;
-import database.Database;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
@@ -12,7 +11,6 @@ import java.util.Objects;
 public class OverviewWindow extends JFrame {
     @Serial
     private static final long serialVersionUID = 1L;
-    private final Database database;
 
     private final JPanel panel;
 
@@ -29,16 +27,12 @@ public class OverviewWindow extends JFrame {
         format.setGroupingUsed(false);
         NumberFormatter formatter = new NumberFormatter(format);
         formatter.setAllowsInvalid(false);
-        database = new Database();
 
-        reload();
         this.setVisible(true);
     }
 
-    public void reload() {
+    public void reload(Data[] data) {
         panel.removeAll();
-
-        Data[] data = database.getDetails();
         String letzteFrage = null;
 
         for (Data dat : data) {

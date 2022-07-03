@@ -55,8 +55,9 @@ public class Database {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, name);
             ResultSet result = pstmt.executeQuery();
-            result.next();
-            return result.getInt("id");
+            if (result.next()) {
+                return result.getInt("id");
+            }
         } catch (SQLException e) {
             System.out.println("Datenbankfehler");
             e.printStackTrace();
@@ -70,8 +71,9 @@ public class Database {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, frage);
             ResultSet result = pstmt.executeQuery();
-            result.next();
-            return result.getInt("id");
+            if (result.next()) {
+                return result.getInt("id");
+            }
         } catch (SQLException e) {
             System.out.println("Datenbankfehler");
             e.printStackTrace();
@@ -130,8 +132,9 @@ public class Database {
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             ResultSet result = pstmt.executeQuery();
-            result.next();
-            return result.getInt("anzahl");
+            if (result.next()) {
+                return result.getInt("anzahl");
+            }
         } catch (SQLException e) {
             System.out.println("Datenbankfehler");
             e.printStackTrace();
