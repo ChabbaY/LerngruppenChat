@@ -38,4 +38,9 @@ public class Data {
     public int hashCode() {
         return Objects.hash(mitglied, frage, antwort, frage_nr);
     }
+
+    @Override
+    public String toString() {
+        return String.format("Data { Mitglied: %s; Frage: %s; Nr.: %s; Antwort: %s }", mitglied, frage, frage_nr, antwort);
+    }
 }

@@ -3,32 +3,15 @@ package gui;
 import database.Database;
 
 import javax.swing.*;
-import javax.swing.text.NumberFormatter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.Serial;
-import java.text.NumberFormat;
 
-public class InputWindow extends JFrame {
-    @Serial
-    private static final long serialVersionUID = 1L;
-
+public class InputWindow extends Window {
     private final JTextField name_input, frage_input, antwort_input;
     private final JFormattedTextField frage_nr_input;
 
     public InputWindow(Database database) {
-        super("Lerngruppe - Chat");
-        this.setSize(1000, 800);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        this.add(panel);
-
-        NumberFormat format = NumberFormat.getInstance();
-        format.setGroupingUsed(false);
-        NumberFormatter formatter = new NumberFormatter(format);
-        formatter.setAllowsInvalid(false);
+        super("Lerngruppe - Chat", 1000, 800);
 
         panel.add(new JLabel("Name"));
         name_input = new JTextField();

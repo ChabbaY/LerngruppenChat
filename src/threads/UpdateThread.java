@@ -19,13 +19,13 @@ public class UpdateThread extends Thread {
         OverviewWindow overviewWindow = null;
         while (true) {
             Data[] data = database.getDetails();
-            if (!Arrays.equals(data, lastData)) {
+            if (!Arrays.equals(data, lastData)) {//bei Änderung min. eines Objekts
                 if (overviewWindow != null) overviewWindow.dispose();
                 overviewWindow = new OverviewWindow(data);
                 lastData = data;
             }
             try {
-                sleep(1000);
+                sleep(1000);//Überprüfung einmal pro Sekunde
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

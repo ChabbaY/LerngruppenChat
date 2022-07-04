@@ -3,30 +3,12 @@ package gui;
 import database.Data;
 
 import javax.swing.*;
-import javax.swing.text.NumberFormatter;
-import java.io.Serial;
-import java.text.NumberFormat;
 import java.util.Objects;
 
-public class OverviewWindow extends JFrame {
-    @Serial
-    private static final long serialVersionUID = 1L;
-
-    private final JPanel panel;
+public class OverviewWindow extends Window {
 
     public OverviewWindow(Data[] data) {
-        super("Lerngruppe - Chat");
-        this.setSize(200, 800);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        this.add(panel);
-
-        NumberFormat format = NumberFormat.getInstance();
-        format.setGroupingUsed(false);
-        NumberFormatter formatter = new NumberFormatter(format);
-        formatter.setAllowsInvalid(false);
+        super("Lerngruppe - Chat", 200, 800);
 
         load(data);
 
