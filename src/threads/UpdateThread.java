@@ -8,9 +8,11 @@ import java.util.Arrays;
 
 public class UpdateThread extends Thread {
     private final Database database;
+    private final String name;
 
-    public UpdateThread(Database database) {
+    public UpdateThread(Database database, String name) {
         this.database = database;
+        this.name = name;
     }
 
     @Override
@@ -21,7 +23,7 @@ public class UpdateThread extends Thread {
             Data[] data = database.getDetails();
             if (!Arrays.equals(data, lastData)) {//bei Änderung min. eines Objekts
                 if (overviewWindow != null) overviewWindow.dispose();
-                overviewWindow = new OverviewWindow(data);
+                overviewWindow = new OverviewWindow(database, data, name);
                 lastData = data;
             }
             try {

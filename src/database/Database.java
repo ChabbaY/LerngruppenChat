@@ -48,6 +48,7 @@ public class Database {
         return null;
     }
 
+    //returns id to a name, -1 if not exists
     private int getMitgliedID(String name) {
         if (conn == null) return -1;
         String sql = "SELECT id FROM mitglied WHERE name=?";
@@ -64,6 +65,7 @@ public class Database {
         }
         return -1;
     }
+    //returns id to a frage, -1 if not exists
     private int getFrageID(String frage) {
         if (conn == null) return -1;
         String sql = "SELECT id FROM frage WHERE frage=?";
@@ -81,6 +83,25 @@ public class Database {
         return -1;
     }
 
+    public int getFrageNr(String mitglied, String frage) {
+        if (conn == null) return -1;
+        String sql = "SELECT frage_nr FROM mitglied_frage LEFT JOIN mitglied ON (mitglied_id=mitglied.id) LEFT JOIN frage ON (frage_id=frage.id) WHERE mitglied.name=? AND frage.frage=?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, mitglied);
+            pstmt.setString(2, frage);
+            ResultSet result = pstmt.executeQuery();
+            if (result.next()) {
+                return result.getInt("frage_nr");
+            }
+        } catch (SQLException e) {
+            System.out.println("Datenbankfehler");
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    //insert new mitglied into database, check if exists required!
     private void setMitglied(String name) {
         if (conn == null) return;
         String sql = "INSERT INTO mitglied (name) VALUES (?)";
@@ -93,6 +114,7 @@ public class Database {
             e.printStackTrace();
         }
     }
+    //insert new frage into database, check if exists required!
     private void setFrage(String frage) {
         if (conn == null) return;
         String sql = "INSERT INTO frage (frage) VALUES (?)";
@@ -106,6 +128,10 @@ public class Database {
         }
     }
 
+    /*
+    erzeugt aus allen Fragen und individuellen Antworten Data Objekte
+    Reihenfolge nach frage sortiert
+     */
     public Data[] getDetails() {
         if (conn == null) return null;
         Data[] data = new Data[countDetails()];
@@ -126,6 +152,7 @@ public class Database {
         }
         return null;
     }
+    //returns the number of elements in the mitglied_frage table
     public int countDetails() {
         if (conn == null) return 0;
         String sql = "SELECT COUNT(*) AS anzahl FROM mitglied_frage";
@@ -142,6 +169,12 @@ public class Database {
         return 0;
     }
 
+    /*
+    setzt für ein Mitglied und eine Frage die individuelle Fragennummer und individuelle Antwort
+    1. insert Mitglied bzw. Frage falls noch nicht vorhanden
+    2. falls noch keine Details eingefügt -> insert Details
+    3. sonst -> update Details
+     */
     public void setDetails(String mitglied, String frage, int frage_nr, String antwort) {
         if (conn == null) return;
         boolean has_entry = false;

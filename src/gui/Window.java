@@ -1,5 +1,7 @@
 package gui;
 
+import database.Database;
+
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 import java.io.Serial;
@@ -12,12 +14,14 @@ public class Window extends JFrame {
     protected JPanel panel;
     protected final NumberFormatter formatter;
 
-    public Window(String title, int width, int height) {
-        super(title);
+    protected Database database;
+
+    public Window(Database database, int width, int height) {
+        super("Lerngruppe - Chat");
         this.setSize(width, height);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        JPanel panel = new JPanel();
+        panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         this.add(panel);
 
@@ -25,5 +29,7 @@ public class Window extends JFrame {
         format.setGroupingUsed(false);
         formatter = new NumberFormatter(format);
         formatter.setAllowsInvalid(false);
+
+        this.database = database;
     }
 }
